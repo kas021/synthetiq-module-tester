@@ -37,7 +37,7 @@ data is not playback evidence.
 
 For the full module contract and evidence rules, read:
 
-https://synthetiq.uk/modules/guide/
+https://synthetiq.uk/modules/
 
 ## Safety boundary
 
