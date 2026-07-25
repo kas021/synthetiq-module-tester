@@ -1,0 +1,16 @@
+{
+  "name": "synthetiq-module-tester",
+  "version": "0.1.0",
+  "description": "Safe, local contract inspection for Synthetiq Player module ZIPs.",
+  "license": "MIT",
+  "type": "commonjs",
+  "bin": {
+    "synthetiq-module-tester": "bin/synthetiq-module-tester.js"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "adm-zip": "^0.6.0"
+  }
+}
