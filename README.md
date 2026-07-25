@@ -3,7 +3,7 @@
 Safe, local static contract inspection for Synthetiq Player module ZIPs.
 
 This project checks package structure, a V3 manifest, JavaScript syntax,
-required `globalThis` handler exports, and common stream-shape mistakes. It
+required `globalThis` handler exports, the V3 `releaseTrack` field, and common stream-shape mistakes. It
 does **not** execute module code, visit source websites, make media requests,
 import anything into Flutter, or prove playback.
 

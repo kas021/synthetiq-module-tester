@@ -11,7 +11,7 @@ const { inspectModule } = require('../lib/inspect.js');
 function makeZip(source) {
   const zip = new AdmZip();
   zip.addFile('example/example.json', Buffer.from(JSON.stringify({
-    id: 'example-v1', name: 'Example', contentType: 'video', contractVersion: 3,
+    id: 'example-v1', name: 'Example', contentType: 'video', contractVersion: 3, releaseTrack: 'stable',
     config: { runtime: { entry: 'index.js', mode: 'local' } },
   })));
   zip.addFile('example/index.js', Buffer.from(source));
@@ -31,6 +31,25 @@ test('accepts a valid static video contract', () => {
   assert.equal(result.status, 'PASS');
   assert.equal(result.evidenceLevel, 'CONTRACT_ONLY');
   assert.equal(result.playback, 'PLAYBACK_UNVERIFIED');
+});
+
+test('rejects a V3 manifest without a valid release track', () => {
+  const zip = new AdmZip();
+  zip.addFile('example/example.json', Buffer.from(JSON.stringify({
+    id: 'example-v1', name: 'Example', contentType: 'video', contractVersion: 3,
+    config: { runtime: { entry: 'index.js', mode: 'local' } },
+  })));
+  zip.addFile('example/index.js', Buffer.from([
+    'globalThis.searchResults = async function() {};',
+    'globalThis.extractDetails = async function() {};',
+    'globalThis.extractEpisodes = async function() {};',
+    'globalThis.extractStreamUrl = async function() {};',
+  ].join('\n')));
+  const target = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'synthetiq-tester-')), 'module.zip');
+  zip.writeZip(target);
+  const result = inspectModule(target);
+  assert.equal(result.status, 'FAIL');
+  assert.ok(result.errors.some((item) => item.code === 'MANIFEST_RELEASE_TRACK'));
 });
 
 test('rejects nested stream-array source patterns', () => {
